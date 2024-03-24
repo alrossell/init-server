@@ -18,7 +18,6 @@ type Song struct {
     DurationSeconds int
 }
 
-
 func main() {
     fmt.Println("Creating a new song")
 
@@ -28,7 +27,42 @@ func main() {
     client, err := sql.Open("postgres", connStr)
 
     if err != nil {
-        log.Fatal(err)
+        log.Fatal("Failed to connect to server: ", err)
+    }
+
+    createTableSQL := `CREATE TABLE IF NOT EXISTS songs (
+        id SERIAL PRIMARY KEY,
+        artist TEXT,
+        albun TEXT,
+        release_year INT,
+        genre TEXT,
+        duration_seconds INT
+    );`
+
+    _, err = client.Exec(createTableSQL)
+
+    if err != nil {
+        log.Fatal("Failed to create table: ", err)
+        return
+    } else {
+        log.Println("Table created successfully!")
+    }
+
+    getRowCount := `SELECT COUNT(*) FROM songs;`
+
+    var numberOfRows int
+    err = client.QueryRow(getRowCount).Scan(&numberOfRows)
+
+    if err != nil {
+        log.Fatal("Failed to get row count: ", err)
+        return
+    } else {
+        log.Println("Row count: ", numberOfRows)
+    }
+
+    if numberOfRows > 0 {
+        log.Println("Table already has data")
+        return
     }
 
     var songs []Song = []Song{
