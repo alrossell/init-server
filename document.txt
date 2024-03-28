@@ -1,0 +1,5 @@
+songs:
+song_id(SERIAL PRIMARY KEY), title(TEXT), artist(TEXT), album(TEXT), release_year(INT), genre(TEXT), duration_seconds(INT)
+
+reviews:
+review_id(SERIAL PRIMARY KEY), user_id(KEY), date(DATE), review(TEXT)
