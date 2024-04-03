@@ -3,3 +3,6 @@ song_id(SERIAL PRIMARY KEY), title(TEXT), artist(TEXT), album(TEXT), release_yea
 
 reviews:
 review_id(SERIAL PRIMARY KEY), user_id(KEY), date(DATE), review(TEXT)
+
+user:
+user_id(SERIAL PRIMARY KEY), first_name(TEXT), last_name(TEXT), user_name(TEXT), date(DATE), password(TEXT)

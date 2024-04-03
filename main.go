@@ -19,8 +19,6 @@ type Song struct {
 }
 
 func main() {
-    fmt.Println("Creating a new song")
-
     connStr := "user=postgres password=mypasswpord dbname=new_database sslmode=disable"
    
     var err error
@@ -31,9 +29,10 @@ func main() {
     }
 
     createTableSQL := `CREATE TABLE IF NOT EXISTS songs (
-        review_id SERIAL PRIMARY KEY,
+        song_id SERIAL PRIMARY KEY,
+        title TEXT NOT NULL,
         artist TEXT NOT NULL,
-        albun TEXT NOT NULL,
+        album TEXT NOT NULL,
         release_year INT,
         genre TEXT,
         duration_seconds INT
@@ -42,10 +41,10 @@ func main() {
     _, err = client.Exec(createTableSQL)
 
     if err != nil {
-        log.Fatal("Failed to create table: ", err)
+        log.Fatal("Failed to create songs table: ", err)
         return
     } else {
-        log.Println("Table created successfully!")
+        log.Println("Songs table created successfully!")
     }
 
     getRowCount := `SELECT COUNT(*) FROM songs;`
@@ -61,7 +60,7 @@ func main() {
     }
 
     if numberOfRows == 0 {
-        log.Println("Inserting data into songs table.")
+        log.Println("Inserting songs into songs table.")
         var songs []Song = []Song{
             {Title: "A Title", Artist: "A Artist", Album: "A Album", ReleaseYear: 2020, Genre: "Pop", DurationSeconds: 180},
             {Title: "B Title", Artist: "B Artist", Album: "B Album", ReleaseYear: 2021, Genre: "Rock", DurationSeconds: 200},
@@ -93,17 +92,36 @@ func main() {
         review_id SERIAL PRIMARY KEY,
         user_id INT NOT NULL,
         song_id INT NOT NULL,
-        data DATE NOT NULL,
-        reivew TEXT NOT NULL
+        date DATE NOT NULL,
+        review TEXT NOT NULL
     );`
 
     _, err = client.Exec(createReviewTableSQL)
 
     if err != nil {
-        log.Fatal("Failed to create table: ", err)
+        log.Fatal("Failed to create review table: ", err)
         return
     } else {
-        log.Println("Table created successfully!")
+        log.Println("Reivew table created successfully!")
+    }
+    
+
+    createUserTableSQL := `CREATE TABLE IF NOT EXISTS users (
+        user_id SERIAL PRIMARY KEY,
+        first_name TEXT NOT NULL,
+        last_name TEXT NOT NULL,
+        user_name TEXT NOT NULL,
+        creation_date DATE NOT NULL,
+        password TEXT NOT NULL
+    );`
+
+    _, err = client.Exec(createUserTableSQL)
+
+    if err != nil {
+        log.Fatal("Failed to create user table: ", err)
+        return
+    } else {
+        log.Println("User table created successfully!")
     }
 }
 
